@@ -2,6 +2,7 @@ from __future__ import print_function
 import transcript as t
 import sys
 import os
+import random
 
 transcriber = t.Transcriber()
 
@@ -10,6 +11,8 @@ transcription = transcriber.Transcribe(sys.argv[1])
 move_commands = ['move', 'go', 'head']
 full_command = {'command':None, 'destination':None}
 trash = ['to', 'please']
+aff_resp = ['Okay.', 'Sure thing.', 'Will do.', 'Roger roger.']
+neg_resp = ["I didn't catch that.", "I didn't understand."]
 
 name = "Dixon"
 
@@ -44,6 +47,12 @@ def nameCheck(name, transcription, audio):
     else:
         return True
 
+def stateChecker(command, aff, neg):
+    if command['command'] == None:
+        print(neg[random.randrange(len(neg))])
+    else:
+        print(aff[random.randrange(len(aff))])
 
 if nameCheck(name, transcription, transcriber.audio):
     Parse(transcription)
+    stateChecker(full_command, aff_resp, neg_resp)
