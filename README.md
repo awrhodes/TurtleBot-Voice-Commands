@@ -2,11 +2,11 @@
 
 This is a project for CSU's CIS 493 class.
 
-**master**
+**Master Branch: **
 Finished code will be pushed here.
 
-**Prototype**
+**Prototype Branch: **
 This branch is for our prototype that will be used to demonstrate our project.
 
-**Testing**
+**Testing Branch: **
 Used for testing. 
