@@ -20,13 +20,16 @@ def Parse(transcript):
             if full_command['command'] is None: #if no command is given
                 print("Adding: " + "'" + word + "'" + " to command.")
                 full_command['command'] = word #add it to the command dict 
-        elif word in trash:
-            print("Removing: " + "'" + word + "'")
-            transcript.remove(word)
+        #elif word in trash:
+            #print("Removing: " + "'" + word + "'")
+            #transcript.remove(word)
         else:
-            print("Adding: " + "'" + word + "'" + " to destination.")
-            destination += word
-            destination += ' '
+            if word in trash:
+                print("Skipping: " + "'" + word + "'")
+            else:
+                print("Adding: " + "'" + word + "'" + " to destination.")
+                destination += word
+                destination += ' '
     full_command['destination'] = destination
 
     print()
