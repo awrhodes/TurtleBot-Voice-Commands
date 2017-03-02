@@ -3,10 +3,17 @@ import sys
 from google.cloud import speech
 
 class Transcriber():
-    def Transcribe(self):
-        transcriber = speech.Client()
+    "Transcriber object. Transcribe(audio) to transcribe." #Documentation
 
-        audio = open(sys.argv[1], 'rb') #open audio file
+    def __init__(self):
+        self.transcription = []
+        self.audio = sys.argv[1]
+
+    #open audio and transcribe it
+    def Transcribe(self, sound):
+        transcriber = speech.Client() #instantiate API client
+
+        audio = open(sound, 'rb')
         content = audio.read()
 
         audio_sample = transcriber.sample(
@@ -15,10 +22,12 @@ class Transcriber():
             encoding='FLAC',
             sample_rate=44100)
 
-        alternatives = transcriber.speech_api.sync_recognize(audio_sample) #transcribe audio
+        #transcribe audio
+        alternatives = transcriber.speech_api.sync_recognize(audio_sample)
 
+        #split the transcription at whitespace, then add the words to a list
         for alternative in alternatives:
             print('Transcription: {}'.format(alternative.transcript))
+            self.transcription = alternative.transcript.split(' ')
 
-Transcriber = Transcriber()
-Transcriber.Transcribe()
+        return self.transcription
