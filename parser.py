@@ -1,6 +1,7 @@
 from __future__ import print_function
 import transcript as t
 import sys
+import os
 
 transcriber = t.Transcriber()
 
@@ -9,6 +10,8 @@ transcription = transcriber.Transcribe(sys.argv[1])
 move_commands = ['move', 'go', 'head']
 full_command = {'command':None, 'destination':None}
 trash = ['to', 'please']
+
+name = "Dixon"
 
 #parse transcription for keywords
 def Parse(transcript):
@@ -20,11 +23,8 @@ def Parse(transcript):
             if full_command['command'] is None: #if no command is given
                 print("Adding: " + "'" + word + "'" + " to command.")
                 full_command['command'] = word #add it to the command dict 
-        #elif word in trash:
-            #print("Removing: " + "'" + word + "'")
-            #transcript.remove(word)
         else:
-            if word in trash:
+            if word in trash or word in name:
                 print("Skipping: " + "'" + word + "'")
             else:
                 print("Adding: " + "'" + word + "'" + " to destination.")
@@ -36,4 +36,14 @@ def Parse(transcript):
     print("full_command dict: ", end="")
     print(full_command)
 
-Parse(transcription)
+def nameCheck(name, transcription, audio):
+    if name not in transcription:
+        print("Name not detected, deleting file.")
+        os.remove(audio)
+        return False
+    else:
+        return True
+
+
+if nameCheck(name, transcription, transcriber.audio):
+    Parse(transcription)
