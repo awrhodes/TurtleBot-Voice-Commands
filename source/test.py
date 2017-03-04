@@ -13,14 +13,12 @@ print("Set pause threshold to: " + str(recognizer.pause_threshold))
 
 recognizer.operation_timeout = 5 #sets API timeout to 5 sec
 
-#def callback(recognizer_inst, adata):
-#    adata = recognizer.listen(source, timeout=5)
-#    return adata
+fenn = [("Fenn Hall", 0.6)]
 
 with sr.Microphone() as source:
-#    baudio = recognizer.listen_in_background(source, callback(recognizer,source))
+    recognizer.adjust_for_ambient_noise(source)
     audio = recognizer.listen(source, timeout=5)
-    transcript = recognizer.recognize_google(audio,key=None,
-                                             language='en-US',
+    transcript = recognizer.recognize_sphinx(audio,language='en-US',
+                                             keyword_entries=None,
                                              show_all=False)
     print(transcript)
