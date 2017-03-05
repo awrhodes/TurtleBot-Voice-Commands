@@ -9,20 +9,20 @@ filename = "command.flac"
 threshold = 85
 debug = False
 
-if sys.argv[1] != None:
-    duration = sys.argv[1]
+#if sys.argv[1] != None:
+#    duration = sys.argv[1]
 
-if sys.argv[2] != None:
-    filename = sys.argv[2]
+#if sys.argv[2] != None:
+#    filename = sys.argv[2]
 
-if sys.argv[3] != None:
-    threshold = sys.argv[3]
+#if sys.argv[3] != None:
+#    threshold = sys.argv[3]
 
-if sys.argv[4] == "debug":
-    debug = True
+#if sys.argv[4] == "debug":
+#    debug = True
 
-print("Running with:\nduration:\t" + duration + 
-		"\nfilename:\t" + filename + "\nthreshold:\t" + threshold)
+#print("Running with:\nduration:\t" + duration + 
+#		"\nfilename:\t" + filename + "\nthreshold:\t" + threshold)
 
 def callback(indata, frames, time, status):
     volume_norm = np.linalg.norm(indata)*10
