@@ -20,24 +20,25 @@ name = "Dixon"
 def Parse(transcript):
     destination = ""
     for word in transcript:
-        print()
-        print("Parsing: " + "'" + word + "'")
+#        print()
+#        print("Parsing: " + "'" + word + "'")
         if word in move_commands: #if current word is a known command
             if full_command['command'] is None: #if no command is given
-                print("Adding: " + "'" + word + "'" + " to command.")
+#                print("Adding: " + "'" + word + "'" + " to command.")
                 full_command['command'] = word #add it to the command dict 
         else:
             if word in trash or word in name:
-                print("Skipping: " + "'" + word + "'")
+#                print("Skipping: " + "'" + word + "'")
+                pass
             else:
-                print("Adding: " + "'" + word + "'" + " to destination.")
+#                print("Adding: " + "'" + word + "'" + " to destination.")
                 destination += word
                 destination += ' '
     full_command['destination'] = destination
 
-    print()
-    print("full_command dict: ", end="")
-    print(full_command)
+#    print()
+#    print("full_command dict: ", end="")
+#    print(full_command)
 
 def nameCheck(name, transcription, audio):
     if name not in transcription:
@@ -51,7 +52,9 @@ def stateChecker(command, aff, neg):
     if command['command'] == None:
         print(neg[random.randrange(len(neg))])
     else:
+        print()
         print(aff[random.randrange(len(aff))])
+        print("I will " + command['command'] + " to " + command['destination'] + ".")
 
 if nameCheck(name, transcription, transcriber.audio):
     Parse(transcription)
