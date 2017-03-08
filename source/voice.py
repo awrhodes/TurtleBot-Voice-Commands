@@ -36,15 +36,15 @@ class Voice():
         pa.click(x2, y2, button='left')
 
     def openChrome(self):
-        self.click(32, 289, 'right')
-        self.click(119, 291, 'left')
+        self.click(34, 117, 'right')
+        self.click(102, 114, 'left')
 
     def searchSite(self, site):
-        self.click(2056, 71, 'left')
+        self.click(441, 68, 'left')
         self.keyboardInput(site)
         self.hitEnter()
         time.sleep(3)
 
     def Inp(self, text):
         self.keyboardInput(text)
-        self.Play(2596, 749)
+        self.Play(1018, 756)
