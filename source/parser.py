@@ -10,7 +10,7 @@ transcription = transcriber.Transcribe(sys.argv[1])
 
 move_commands = ['move', 'go', 'head']
 full_command = {'command':None, 'destination':None}
-trash = ['to', 'please']
+trash = ['to', 'please', 'hey']
 aff_resp = ['Okay.', 'Sure thing.', 'Will do.', 'Roger roger.']
 neg_resp = ["I didn't catch that.", "I didn't understand."]
 
