@@ -19,10 +19,10 @@ class Parser:
 
         #init command key words from file
         commands_file = open('commands.txt', 'r')
-        self.commands = []
+        self.move_commands = []
         for word in commands_file:
             strp_word = word.strip('\n')
-            self.commands.append(strp_word)
+            self.move_commands.append(strp_word)
         commands_file.close()
 
         # init key words
