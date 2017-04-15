@@ -2,7 +2,7 @@
 
 import rospy
 import random
-import std_msgs.msg import String
+from std_msgs.msg import String
 
 class Parser:
     def __init__(self):
@@ -20,14 +20,14 @@ class Parser:
         rospy.loginfo("Parser running ...")
 
         # subscriber
-        rospy.Subscriber('/recogizer/output', String, self.parseCallback)
+        rospy.Subscriber('/recognizer/output', String, self.parseCallback)
 
     def parseCallback(self, msg):
         rospy.loginfo(msg.data)
         transcript = msg.data.split()
         
         # check if name in command
-        if nameCheck(self.name, transcript):
+        if self.nameCheck(self.name, transcript):
             for word in transcript:
                 # if current word is a known command
                 if word in self.move_commands:
@@ -36,7 +36,7 @@ class Parser:
                 else:
                     if word in self.destination:
                         self.full_command['destination'] = word
-            stateChecker(self.full_command, self.aff_resp, self.neg_resp)
+            self.stateChecker(self.full_command, self.aff_resp, self.neg_resp)
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
