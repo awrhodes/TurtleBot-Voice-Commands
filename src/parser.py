@@ -3,6 +3,7 @@
 import rospy
 import random
 from std_msgs.msg import String
+from Dixon.msg import command
 
 class Parser:
     def __init__(self):
@@ -15,12 +16,15 @@ class Parser:
         self.neg_resp = ["I didn't catch that", "I didn't understnad"]
         self.destination = ['room 202', 'forward', 'backwards']
 
-        self.name = "Dixon"
+        self.name = "dixon"
 
         rospy.loginfo("Parser running ...")
 
         # subscriber
         rospy.Subscriber('/recognizer/output', String, self.parseCallback)
+        
+        # publisher for nav
+        self.pub = rospy.Publisher('/Dixon/command', command, queue_size=10)
 
     def parseCallback(self, msg):
         rospy.loginfo(msg.data)
@@ -36,7 +40,14 @@ class Parser:
                 else:
                     if word in self.destination:
                         self.full_command['destination'] = word
-            self.stateChecker(self.full_command, self.aff_resp, self.neg_resp)
+            self.responseGen(self.full_command, self.aff_resp, self.neg_resp)
+            command_msg = command()
+            #command_msg.command = self.full_command['command']
+            #command_msg.destination = self.full_command['destination']
+            command_msg.command = "apple"
+            command_msg.destination = "orange"
+            
+            self.pub.publish(command_msg)
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
