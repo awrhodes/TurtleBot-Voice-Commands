@@ -4,12 +4,13 @@ import rospy
 import random
 from std_msgs.msg import String
 from Dixon.msg import command
+import sys
 
 class Parser:
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
         # init destination key words from file
-        destinations_file = sys.open('destination.txt', 'r')
+        destinations_file = open('destination.txt', 'r')
         self.destination = []
         for word in destinations_file:
             strp_word = word.strip('\n')
@@ -20,7 +21,7 @@ class Parser:
         commands_file = open('commands.txt', 'r')
         self.commands = []
         for word in commands_file:
-            strp_word = word.stip('\n')
+            strp_word = word.strip('\n')
             self.commands.append(strp_word)
         commands_file.close()
 
@@ -88,5 +89,5 @@ if __name__=="__main__":
     try:
         Parser()
         rospy.spin()
-    except:
-        pass
+    except Exception as e:
+        print(e)
