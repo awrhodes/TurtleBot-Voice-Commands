@@ -9,7 +9,7 @@ class Parser:
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
         # init destination key words from file
-        destinations_file = sys.open('destination.txt', 'r')
+        destinations_file = open('destination.txt', 'r')
         self.destination = []
         for word in destinations_file:
             strp_word = word.strip('\n')
