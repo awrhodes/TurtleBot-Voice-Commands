@@ -105,10 +105,10 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES Dixon
-   CATKIN_DEPENDS message_runtime message_generation pocketsphinx roscpp rospy sound_play std_msgs
-#  DEPENDS system_lib
+  INCLUDE_DIRS include
+  LIBRARIES Dixon
+  CATKIN_DEPENDS message_runtime pocketsphinx roscpp rospy sound_play std_msgs
+  DEPENDS system_lib
 )
 
 ###########
