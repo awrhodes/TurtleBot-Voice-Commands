@@ -59,11 +59,13 @@ class Parser:
                         self.full_command['destination'] = word
             self.responseGen(self.full_command, self.aff_resp, self.neg_resp)
             command_msg = command()
-            #command_msg.command = self.full_command['command']
-            #command_msg.destination = self.full_command['destination']
-            command_msg.command = "apple"
-            command_msg.destination = "orange"
-
+            command_msg.command = str(self.full_command['command'])
+            command_msg.destination = str(self.full_command['destination'])
+            #command_msg.command = "apple"
+            #command_msg.destination = "orange"
+            print(self.full_command)
+            print(str(command_msg))
+            
             self.pub.publish(command_msg)
 
     def nameCheck(self, name, transcription):
