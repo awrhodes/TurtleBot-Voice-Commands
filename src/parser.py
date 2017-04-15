@@ -8,9 +8,8 @@ from Dixon.msg import command
 class Parser:
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
-
         # init destination key words from file
-        destinations_file = open('destinations.txt', 'r')
+        destinations_file = sys.open('destination.txt', 'r')
         self.destination = []
         for word in destinations_file:
             strp_word = word.strip('\n')
@@ -85,6 +84,7 @@ class Parser:
 
 if __name__=="__main__":
     rospy.init_node('dixon_parser')
+
     try:
         Parser()
         rospy.spin()
