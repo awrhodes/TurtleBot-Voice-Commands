@@ -27,7 +27,7 @@ class Parser:
 
         # init key words
         self.aff_resp = ['Okay', 'Sure thing', 'Will do', 'Roger roger']
-        self.neg_resp = ["I didn't catch that", "I didn't understnad"]
+        self.neg_resp = ["I didn't catch that", "I didn't understand"]
         self.name = "dixon"
 
         self.full_command = {'command':None, 'destination':None}
