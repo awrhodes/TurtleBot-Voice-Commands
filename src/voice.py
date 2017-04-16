@@ -25,11 +25,10 @@ class DixonVoice:
         rospy.loginfo("Ready to take commands...")
 
         # Subscribe to response generator
-        rospy.Subscriber('/recognizer/output', String, self.dixonVoice)
+        rospy.Subscriber('/dixon_response/response', String, self.dixonVoice)
 
     def dixonVoice(self, msg):
         # Speak
-        # Currently only repeats what sphinx transcribes
         self.soundhandle.say(msg.data, self.voice)
 
     def cleanUp(self):

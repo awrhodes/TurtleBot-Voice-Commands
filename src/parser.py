@@ -38,6 +38,7 @@ class Parser:
         rospy.Subscriber('/recognizer/output', String, self.parseCallback)
         # publisher for nav
         self.pub = rospy.Publisher('/Dixon/command', command, queue_size=10)
+        self.resp_pub = rospy.Publisher('dixon_response/response', String, queue_size=10)
 
     def parseCallback(self, msg):
         rospy.loginfo(msg.data)
@@ -69,8 +70,11 @@ class Parser:
                     command_msg.destination = str(self.full_command['destination'])
                 print(self.full_command)
                 print(str(command_msg))
-
                 self.pub.publish(command_msg)
+                # add self.resp to message and publish
+                resp_msg = String()
+                resp_msg.data = self.resp
+                self.resp_pub.publish(resp_msg)
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
@@ -81,13 +85,16 @@ class Parser:
 
     def responseGen(self, command, aff, neg):
         if command['command'] == None:
-            print(neg[random.randrange(len(neg))])
+            self.resp = neg[random.randrange(len(neg))]
+            print(self.resp)
             return False
         elif command['command'] == 'stop' or command['command'] == 'halt':
-            print("\n"+aff[random.randrange(len(aff))])
+            self.resp = "\n"+aff[random.randrange(len(aff))]
+            print(self.resp)
             return True
         else:
-            print("\n"+aff[random.randrange(len(aff))])
+            self.resp = "\n"+aff[random.randrange(len(aff))]
+            print(self.resp)
             print("I will " + command['command'] + " to " + command['destination'] + ".")
             return True
 
