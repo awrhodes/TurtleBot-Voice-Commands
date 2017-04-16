@@ -6,7 +6,7 @@ from std_msgs.msg import String
 
 from sound_play.libsoundplay import SoundClient
 
-class TalkBack:
+class DixonVoice:
     def __init__(self):
         rospy.on_shutdown(self.cleanUp)
 
@@ -38,7 +38,7 @@ class TalkBack:
 if __name__ == "__main__":
     rospy.init_node('dixon_voice')
     try:
-        TalkBack()
+        DixonVoice()
         rospy.spin()
     except Exception as e:
         print(e)
