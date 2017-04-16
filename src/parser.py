@@ -98,8 +98,8 @@ class Parser:
             return False
         else:
             self.resp = "\n"+aff[random.randrange(len(aff))]
+            self.resp += ". I will " + command['command'] + " to " + command['destination'] + "."
             print(self.resp)
-            print("I will " + command['command'] + " to " + command['destination'] + ".")
             return True
 
     def cleanup(self):
