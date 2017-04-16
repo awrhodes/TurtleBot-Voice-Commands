@@ -71,10 +71,10 @@ class Parser:
                 print(self.full_command)
                 print(str(command_msg))
                 self.pub.publish(command_msg)
-                # add self.resp to message and publish
-                resp_msg = String()
-                resp_msg.data = self.resp
-                self.resp_pub.publish(resp_msg)
+            # add self.resp to message and publish
+            resp_msg = String()
+            resp_msg.data = self.resp
+            self.resp_pub.publish(resp_msg)
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
