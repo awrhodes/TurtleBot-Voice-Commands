@@ -4,11 +4,11 @@ import rospy
 import random
 from std_msgs.msg import String
 from Dixon.msg import command
-import sys
 
 class Parser:
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
+
         # init destination key words from file
         destinations_file = open('destination.txt', 'r')
         self.destination = []
@@ -19,18 +19,18 @@ class Parser:
 
         #init command key words from file
         commands_file = open('commands.txt', 'r')
-        self.commands = []
+        self.move_commands = []
         for word in commands_file:
             strp_word = word.strip('\n')
-            self.commands.append(strp_word)
+            self.move_commands.append(strp_word)
         commands_file.close()
 
         # init key words
-        self.full_command = {'command':None, 'destination':None}
         self.aff_resp = ['Okay', 'Sure thing', 'Will do', 'Roger roger']
         self.neg_resp = ["I didn't catch that", "I didn't understnad"]
-
         self.name = "dixon"
+
+        self.full_command = {'command':None, 'destination':None}
 
         rospy.loginfo("Parser running ...")
 
@@ -57,14 +57,20 @@ class Parser:
                 else:
                     if word in self.destination:
                         self.full_command['destination'] = word
-            self.responseGen(self.full_command, self.aff_resp, self.neg_resp)
-            command_msg = command()
-            #command_msg.command = self.full_command['command']
-            #command_msg.destination = self.full_command['destination']
-            command_msg.command = "apple"
-            command_msg.destination = "orange"
 
-            self.pub.publish(command_msg)
+            # generate response
+            if self.responseGen(self.full_command, self.aff_resp, self.neg_resp):
+                # add command dictionary values to message and publish
+                command_msg = command()
+                command_msg.command = str(self.full_command['command'])
+                if self.full_command['command'] == 'stop' or self.full_command['command'] == 'halt':
+                    command_msg.destination = ""
+                else:
+                    command_msg.destination = str(self.full_command['destination'])
+                print(self.full_command)
+                print(str(command_msg))
+
+                self.pub.publish(command_msg)
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
@@ -76,9 +82,14 @@ class Parser:
     def responseGen(self, command, aff, neg):
         if command['command'] == None:
             print(neg[random.randrange(len(neg))])
+            return False
+        elif command['command'] == 'stop' or command['command'] == 'halt':
+            print("\n"+aff[random.randrange(len(aff))])
+            return True
         else:
             print("\n"+aff[random.randrange(len(aff))])
             print("I will " + command['command'] + " to " + command['destination'] + ".")
+            return True
 
     def cleanup(self):
         rospy.loginfo("Shutting down parser ...")
