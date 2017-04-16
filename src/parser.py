@@ -92,6 +92,10 @@ class Parser:
             self.resp = "\n"+aff[random.randrange(len(aff))]
             print(self.resp)
             return True
+        elif command['destination'] == None:
+            self.resp = neg[random.randrange(leng(neg))]
+            print(self.resp)
+            return False
         else:
             self.resp = "\n"+aff[random.randrange(len(aff))]
             print(self.resp)
