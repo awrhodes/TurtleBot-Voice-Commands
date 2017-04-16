@@ -59,19 +59,18 @@ class Parser:
                         self.full_command['destination'] = word
 
             # generate response
-            self.responseGen(self.full_command, self.aff_resp, self.neg_resp)
+            if self.responseGen(self.full_command, self.aff_resp, self.neg_resp):
+                # add command dictionary values to message and publish
+                command_msg = command()
+                command_msg.command = str(self.full_command['command'])
+                if self.full_command['command'] == 'stop' or self.full_command['command'] == 'halt':
+                    command_msg.destination = ""
+                else:
+                    command_msg.destination = str(self.full_command['destination'])
+                print(self.full_command)
+                print(str(command_msg))
 
-            # add command dictionary values to message and publish
-            command_msg = command()
-            command_msg.command = str(self.full_command['command'])
-            if self.full_command['command'] == 'stop' or self.full_command['command'] == 'halt':
-                command_msg.destination = None
-            else:
-                command_msg.destination = str(self.full_command['destination'])
-            print(self.full_command)
-            print(str(command_msg))
-
-            self.pub.publish(command_msg)
+                self.pub.publish(command_msg)
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
@@ -83,11 +82,14 @@ class Parser:
     def responseGen(self, command, aff, neg):
         if command['command'] == None:
             print(neg[random.randrange(len(neg))])
+            return False
         elif command['command'] == 'stop' or command['command'] == 'halt':
             print("\n"+aff[random.randrange(len(aff))])
+            return True
         else:
             print("\n"+aff[random.randrange(len(aff))])
             print("I will " + command['command'] + " to " + command['destination'] + ".")
+            return True
 
     def cleanup(self):
         rospy.loginfo("Shutting down parser ...")
