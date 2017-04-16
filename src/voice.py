@@ -10,7 +10,7 @@ class TalkBack:
     def __init__(self):
         rospy.on_shutdown(self.cleanUp)
 
-        self.voice = rospy.get_param("~voice", "voice_don_diphone")
+        self.voice = rospy.get_param("~voice", "voice_kal_diphone")
         self.wavepath = rospy.get_param("~wavepath", "")
 
         # Create the sound client object
@@ -33,12 +33,12 @@ class TalkBack:
         self.soundhandle.say(msg.data, self.voice)
 
     def cleanUp(self):
-        rospy.loginfo("Shutting down dixonVoice node...")
+        rospy.loginfo("Shutting down dixon_voice node...")
 
 if __name__ == "__main__":
-    rospy.init_node('dixonVoice')
+    rospy.init_node('dixon_voice')
     try:
-        dixonVoice()
+        TalkBack()
         rospy.spin()
-    except:
-        pass
+    except Exception as e:
+        print(e)
