@@ -23,6 +23,7 @@ class Parser:
         for word in commands_file:
             strp_word = word.strip('\n')
             self.move_commands.append(strp_word)
+            print(strp_word)
         commands_file.close()
 
         # init key words
@@ -55,9 +56,11 @@ class Parser:
                 if word in self.move_commands:
                     if self.full_command['command'] is None:
                         self.full_command['command'] = word
+                        print("Added " + word + " to command.")
                 else:
                     if word in self.destination:
                         self.full_command['destination'] = word
+                        print("Added " + word + " to destination.")
 
             # generate response
             if self.responseGen(self.full_command, self.aff_resp, self.neg_resp):
