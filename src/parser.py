@@ -37,7 +37,7 @@ class Parser:
 
         self.full_command = {'command':None, 'destination':None}
 
-        rospy.("Parser running ...")
+        rospy.loginfo("Parser running ...")
 
         # subscriber
         rospy.Subscriber('/recognizer/output', String, self.parseCallback)
