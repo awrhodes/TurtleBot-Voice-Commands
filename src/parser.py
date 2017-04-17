@@ -93,7 +93,7 @@ class Parser:
             print(self.resp)
             return True
         elif command['destination'] == None:
-            self.resp = neg[random.randrange(leng(neg))]
+            self.resp = neg[random.randrange(len(neg))]
             print(self.resp)
             return False
         else:
