@@ -1,3 +1,4 @@
+room 199
 room 200
 room 201
 room 202
@@ -98,12 +99,7 @@ room 296
 room 297
 room 298
 room 299
-forward
-backward
-backwards
-left
-right
-faster
-fast
-slow
-slower
+point a
+point b
+point c
+point d
