@@ -1,4 +1,4 @@
-Language model created by QuickLM on Sun Apr 16 20:06:22 EDT 2017
+Language model created by QuickLM on Sun Apr 16 20:20:14 EDT 2017
 Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
 
 The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
@@ -17,11 +17,10 @@ ngram 3=34
 \1-grams:
 -0.7782 </s> -0.3010
 -0.7782 <s> -0.2218
--2.3096 A -0.2218
--2.3096 B -0.2218
+-2.3096 ALPHA -0.2218
 -2.3096 BACKWARD -0.2218
--2.3096 C -0.2218
--2.3096 D -0.2218
+-2.3096 BETA -0.2218
+-2.3096 DELTA -0.2218
 -2.3096 DIX -0.2218
 -2.3096 DIXON -0.2218
 -2.3096 DOOR -0.2218
@@ -29,6 +28,7 @@ ngram 3=34
 -2.3096 FENN -0.2218
 -2.3096 FH -0.2218
 -2.3096 FORWARD -0.2218
+-2.3096 GAMMA -0.2218
 -2.3096 GO -0.2218
 -2.3096 HALL -0.2218
 -2.3096 HALT -0.2218
@@ -53,11 +53,10 @@ ngram 3=34
 -2.3096 YO -0.2218
 
 \2-grams:
--1.8325 <s> A 0.0000
--1.8325 <s> B 0.0000
+-1.8325 <s> ALPHA 0.0000
 -1.8325 <s> BACKWARD 0.0000
--1.8325 <s> C 0.0000
--1.8325 <s> D 0.0000
+-1.8325 <s> BETA 0.0000
+-1.8325 <s> DELTA 0.0000
 -1.8325 <s> DIX 0.0000
 -1.8325 <s> DIXON 0.0000
 -1.8325 <s> DOOR 0.0000
@@ -65,6 +64,7 @@ ngram 3=34
 -1.8325 <s> FENN 0.0000
 -1.8325 <s> FH 0.0000
 -1.8325 <s> FORWARD 0.0000
+-1.8325 <s> GAMMA 0.0000
 -1.8325 <s> GO 0.0000
 -1.8325 <s> HALL 0.0000
 -1.8325 <s> HALT 0.0000
@@ -87,11 +87,10 @@ ngram 3=34
 -1.8325 <s> TURN 0.0000
 -1.8325 <s> UP 0.0000
 -1.8325 <s> YO 0.0000
--0.3010 A </s> -0.3010
--0.3010 B </s> -0.3010
+-0.3010 ALPHA </s> -0.3010
 -0.3010 BACKWARD </s> -0.3010
--0.3010 C </s> -0.3010
--0.3010 D </s> -0.3010
+-0.3010 BETA </s> -0.3010
+-0.3010 DELTA </s> -0.3010
 -0.3010 DIX </s> -0.3010
 -0.3010 DIXON </s> -0.3010
 -0.3010 DOOR </s> -0.3010
@@ -99,6 +98,7 @@ ngram 3=34
 -0.3010 FENN </s> -0.3010
 -0.3010 FH </s> -0.3010
 -0.3010 FORWARD </s> -0.3010
+-0.3010 GAMMA </s> -0.3010
 -0.3010 GO </s> -0.3010
 -0.3010 HALL </s> -0.3010
 -0.3010 HALT </s> -0.3010
@@ -123,11 +123,10 @@ ngram 3=34
 -0.3010 YO </s> -0.3010
 
 \3-grams:
--0.3010 <s> A </s>
--0.3010 <s> B </s>
+-0.3010 <s> ALPHA </s>
 -0.3010 <s> BACKWARD </s>
--0.3010 <s> C </s>
--0.3010 <s> D </s>
+-0.3010 <s> BETA </s>
+-0.3010 <s> DELTA </s>
 -0.3010 <s> DIX </s>
 -0.3010 <s> DIXON </s>
 -0.3010 <s> DOOR </s>
@@ -135,6 +134,7 @@ ngram 3=34
 -0.3010 <s> FENN </s>
 -0.3010 <s> FH </s>
 -0.3010 <s> FORWARD </s>
+-0.3010 <s> GAMMA </s>
 -0.3010 <s> GO </s>
 -0.3010 <s> HALL </s>
 -0.3010 <s> HALT </s>
