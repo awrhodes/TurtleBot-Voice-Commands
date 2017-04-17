@@ -10,22 +10,25 @@ class Parser:
         rospy.on_shutdown(self.cleanup)
 
         # init destination key words from file
-        destinations_file = open('destination.txt', 'r')
-        self.destination = []
-        for word in destinations_file:
-            strp_word = word.strip('\n')
-            self.destination.append(strp_word)
-            print(strp_word)
-        destinations_file.close()
+        #destinations_file = open('destination.txt', 'r')
+        #self.destination = []
+        #for word in destinations_file:
+        #    strp_word = word.strip('\n')
+        #    self.destination.append(strp_word)
+        #    print(strp_word)
+        #destinations_file.close()
+
+        self.destination = genList(self, 'destination.txt')
 
         #init command key words from file
-        commands_file = open('commands.txt', 'r')
-        self.move_commands = []
-        for word in commands_file:
-            strp_word = word.strip('\n')
-            self.move_commands.append(strp_word)
-#            print(strp_word)
-        commands_file.close()
+        #commands_file = open('commands.txt', 'r')
+        #self.move_commands = []
+        #for word in commands_file:
+        #    strp_word = word.strip('\n')
+        #    self.move_commands.append(strp_word)
+        #commands_file.close()
+
+        self.move_commands = genList(self, 'commands.txt')
 
         # init key words
         self.aff_resp = ['Okay', 'Sure thing', 'Will do', 'Roger roger']
@@ -34,7 +37,7 @@ class Parser:
 
         self.full_command = {'command':None, 'destination':None}
 
-        rospy.loginfo("Parser running ...")
+        rospy.("Parser running ...")
 
         # subscriber
         rospy.Subscriber('/recognizer/output', String, self.parseCallback)
@@ -79,6 +82,17 @@ class Parser:
             resp_msg = String()
             resp_msg.data = self.resp
             self.resp_pub.publish(resp_msg)
+
+    def genList(self, file):
+        word_list = []
+        with text as open(file, 'r'):
+            for word in text:
+                strp_word = word.strip('\n')
+                word_list.append(strp_word)
+                #for debugging
+                print(strp_word)
+            return word_list
+
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
