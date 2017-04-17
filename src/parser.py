@@ -9,26 +9,8 @@ class Parser:
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
 
-        # init destination key words from file
-        #destinations_file = open('destination.txt', 'r')
-        #self.destination = []
-        #for word in destinations_file:
-        #    strp_word = word.strip('\n')
-        #    self.destination.append(strp_word)
-        #    print(strp_word)
-        #destinations_file.close()
-
-        self.destination = genList(self, 'destination.txt')
-
-        #init command key words from file
-        #commands_file = open('commands.txt', 'r')
-        #self.move_commands = []
-        #for word in commands_file:
-        #    strp_word = word.strip('\n')
-        #    self.move_commands.append(strp_word)
-        #commands_file.close()
-
-        self.move_commands = genList(self, 'commands.txt')
+        self.destination = self.genList('destination.txt')
+        self.move_commands = self.genList('commands.txt')
 
         # init key words
         self.aff_resp = ['Okay', 'Sure thing', 'Will do', 'Roger roger']
