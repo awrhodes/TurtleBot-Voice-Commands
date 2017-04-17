@@ -9,22 +9,22 @@ class Parser:
     def __init__(self):
         rospy.on_shutdown(self.cleanup)
 
-        self.destination = self.genList('destination.txt')
-        self.move_commands = self.genList('commands.txt')
-
-        # init key words
-        self.aff_resp = ['Okay', 'Sure thing', 'Will do', 'Roger roger']
-        self.neg_resp = ["I didn't catch that", "I didn't understand"]
-        self.name = "dixon"
-
-        self.full_command = {'command':None, 'destination':None}
-
         rospy.loginfo("Parser running ...")
 
-        # subscriber
+        # init key words
+        self.destination = self.genList('destination.txt')
+        self.move_commands = self.genList('commands.txt')
+        self.aff_resp = self.genList('aff_resp.txt')
+        self.neg_resp = self.genList('neg_resp.txt')
+        self.name = "dixon"
+
+        # dict that contains the full command to be published
+        self.full_command = {'command':None, 'destination':None}
+
+        # subscriber(s)
         rospy.Subscriber('/recognizer/output', String, self.parseCallback)
-        # publisher for nav
-        self.pub = rospy.Publisher('/Dixon/command', command, queue_size=10)
+        # publishers
+        self.pub_cmd = rospy.Publisher('/Dixon/command', command, queue_size=10)
         self.resp_pub = rospy.Publisher('dixon_response/response', String, queue_size=10)
 
     def parseCallback(self, msg):
@@ -59,7 +59,8 @@ class Parser:
                     command_msg.destination = str(self.full_command['destination'])
                 print(self.full_command)
                 print(str(command_msg))
-                self.pub.publish(command_msg)
+                self.pub_cmd.publish(command_msg)
+                
             # add self.resp to message and publish
             resp_msg = String()
             resp_msg.data = self.resp
@@ -74,7 +75,6 @@ class Parser:
                 #for debugging
                 print(strp_word)
             return word_list
-
 
     def nameCheck(self, name, transcription):
         if name not in transcription:
