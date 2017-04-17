@@ -15,6 +15,7 @@ class Parser:
         for word in destinations_file:
             strp_word = word.strip('\n')
             self.destination.append(strp_word)
+            print(strp_word)
         destinations_file.close()
 
         #init command key words from file
@@ -23,7 +24,7 @@ class Parser:
         for word in commands_file:
             strp_word = word.strip('\n')
             self.move_commands.append(strp_word)
-            print(strp_word)
+#            print(strp_word)
         commands_file.close()
 
         # init key words
