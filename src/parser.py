@@ -85,7 +85,7 @@ class Parser:
 
     def genList(self, file):
         word_list = []
-        with text as open(file, 'r'):
+        with open(file, 'r') as text:
             for word in text:
                 strp_word = word.strip('\n')
                 word_list.append(strp_word)
