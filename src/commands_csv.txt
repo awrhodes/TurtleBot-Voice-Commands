@@ -1,0 +1,5 @@
+go, head, move
+stop, abort, kill, off, halt
+turn
+speed
+slow

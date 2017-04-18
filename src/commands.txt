@@ -1,8 +1,0 @@
-go
-move
-head
-stop
-halt
-turn
-speed
-slow
