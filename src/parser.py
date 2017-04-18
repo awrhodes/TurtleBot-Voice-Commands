@@ -38,6 +38,7 @@ class Parser:
 
         # check if names in command
         if self.nameCheck(self.names transcript):
+            self.genCommandDict(self, transcript)
             # if command and destination word is in utterance add it to the command dict.
             #for word in transcript:
             #    if word in self.:
@@ -49,25 +50,12 @@ class Parser:
             #            self.full_command['destination'] = word
             #            rospy.loginfo("Added " + word + " to destination.")
 
-            # check each value for every key in the command and destination dictionaries
-            # if any of the values matches a word in the transcription add it the full_command dict
-            for cmd_key, cmd_value in self.move_commands.items()
-                for word in transcript:
-                    if word in cmd_value and self.full_command['command'] is None:
-                        self.full_command['command'] = word
-                        rospy.loginfo("Added " + word + " to command.")
-                    else:
-                        for dest_key, dest_value in self.destination.items():
-                            if word in dest_value:
-                            self.full_command['destination'] = word
-                            rospy.loginfo("Added " + word + " to destination.")
-
             # generate response
             if self.responseGen(self.full_command, self.aff_resp, self.neg_resp):
                 # add command dictionary values to message and publish
                 command_msg = command()
                 command_msg.command = str(self.full_command['command'])
-                if self.full_command['command'] == 'stop' or self.full_command['command'] == 'halt':
+                if self.full_command['command'] == 'stop':
                     command_msg.destination = ""
                 else:
                     command_msg.destination = str(self.full_command['destination'])
@@ -114,6 +102,20 @@ class Parser:
                 return False
             else:
                 return True
+
+    # check each value for every key in the command and destination dictionaries
+    # if any of the values matches a word in the transcription add it the full_command dict        
+    def genCommandDict(self, transcript):
+        for cmd_key, cmd_value in self.move_commands.items()
+            for word in transcript:
+                if word in cmd_value and self.full_command['command'] is None:
+                    self.full_command['command'] = cmd_value
+                    rospy.loginfo("Added " + cmd_value + " to command.")
+                else:
+                    for dest_key, dest_value in self.destination.items():
+                        if word in dest_value:
+                            self.full_command['destination'] = dest_value
+                            rospy.loginfo("Added " + dest_value + " to destination.")
 
     # generate response based on command dictionary
     # if no command is given return neg resp
