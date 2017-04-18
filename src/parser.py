@@ -37,7 +37,7 @@ class Parser:
         self.full_command['destination'] = None
 
         # check if names in command
-        if self.nameCheck(self.names transcript):
+        if self.nameCheck(self.names, transcript):
             self.genCommandDict(self, transcript)
             # if command and destination word is in utterance add it to the command dict.
             #for word in transcript:
@@ -73,14 +73,14 @@ class Parser:
     # the first value in a row is the command, all other values are alternative words
     # (the first command counts as an alternative word. if the same word is included twice an error is thrown)
     def genDict(self, text):
-    with open(text, 'r') as csv_file:
-        reader = csv.reader(csv_file)
-        try:
-            dic = dict((key[0], key) for key in reader)
-            rospy.loginfo("Generated:\n" + str(dic))
-            return dic
-        except IndexError:
-            rospy.loginfo("IndexError in genList(): Is the same word listed twice?")
+        with open(text, 'r') as csv_file:
+            reader = csv.reader(csv_file)
+            try:
+                dic = dict((key[0], key) for key in reader)
+                rospy.loginfo("Generated:\n" + str(dic))
+                return dic
+            except IndexError:
+                rospy.loginfo("IndexError in genList(): Is the same word listed twice?")
 
     # generate list based on text file
     # splits at newline
@@ -95,7 +95,7 @@ class Parser:
 
 
     # check if name is in utterance transcription
-    def nameCheck(self, names transcription):
+    def nameCheck(self, names, transcription):
         for name in names:
             if name not in transcription:
                 rospy.loginfo("name not detected, invalid command")
@@ -106,7 +106,7 @@ class Parser:
     # check each value for every key in the command and destination dictionaries
     # if any of the values matches a word in the transcription add it the full_command dict        
     def genCommandDict(self, transcript):
-        for cmd_key, cmd_value in self.move_commands.items()
+        for cmd_key, cmd_value in self.move_commands.items():
             for word in transcript:
                 if word in cmd_value and self.full_command['command'] is None:
                     self.full_command['command'] = cmd_value
@@ -143,9 +143,8 @@ class Parser:
     def cleanup(self):
         rospy.loginfo("Shutting down parser ...")
 
-if __names_=="__main__":
+if __name__ == "__main__":
     rospy.init_node('dixon_parser')
-
     try:
         Parser()
         rospy.spin()
