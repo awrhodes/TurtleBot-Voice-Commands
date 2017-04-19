@@ -17,9 +17,14 @@ class Parser:
         self.aff_resp = self.genList('aff_resp.txt')
         self.neg_resp = self.genList('neg_resp.txt')
         self.names= ["dixon", "dix"]
+        self.dest_queue []
 
         # dict that contains the full command to be published
         self.full_command = {'command':None, 'destination':None}
+
+        # construct publisher objects
+        command_msg = command()
+        resp_msg = String()
 
         # subscriber(s)
         # /recognizer/output is the topic pocketsphinx pubs to
@@ -52,8 +57,7 @@ class Parser:
 
             # generate response
             if self.responseGen(self.full_command, self.aff_resp, self.neg_resp):
-                # add command dictionary values to message and publish
-                command_msg = command()
+                # add command dictionary values to message and publish 
                 command_msg.command = str(self.full_command['command'])
                 if self.full_command['command'] == 'stop':
                     command_msg.destination = ""
@@ -63,8 +67,7 @@ class Parser:
                 rospy.loginfo(str(command_msg))
                 self.pub_cmd.publish(command_msg)
                 
-            # add self.resp to message and publish
-            resp_msg = String()
+            # add self.resp to message and publish            
             resp_msg.data = self.resp
             self.resp_pub.publish(resp_msg)
 
@@ -105,17 +108,26 @@ class Parser:
 
     # check each value for every key in the command and destination dictionaries
     # if any of the values matches a word in the transcription add it the full_command dict        
+    # if the destination queue is filled, new commands can't be added except the stop command
+    # if more than one destination is given, the first one will be added to the command dict,
+    # the rest will be added to the queue
     def genCommandDict(self, transcript):
         for cmd_key, cmd_value in self.move_commands.items():
             for word in transcript:
-                if word in cmd_value and self.full_command['command'] is None:
+                if self.dest_queue and word not in cmd_key['stop']:
+                    rospy.loginfo("Destinations are currently queued. Command cannot be taken.")
+                elif word in cmd_value and self.full_command['command'] is None:
                     self.full_command['command'] = cmd_value
                     rospy.loginfo("Added " + cmd_value + " to command.")
                 else:
                     for dest_key, dest_value in self.destination.items():
                         if word in dest_value:
-                            self.full_command['destination'] = dest_value
-                            rospy.loginfo("Added " + dest_value + " to destination.")
+                            if not self.dest_queue:
+                                self.full_command['destination'] = dest_value
+                                rospy.loginfo("Added " + dest_value + " to destination.")
+                            else:
+                                self.dest_queue.append(dest_value)
+                                rospy.loginfo("Added " + dest_value + "to destination queue.")
 
     # generate response based on command dictionary
     # if no command is given return neg resp
@@ -134,9 +146,17 @@ class Parser:
             self.resp = neg[random.randrange(len(neg))]
             rospy.loginfo(self.resp)
             return False
+        # if the command is stop generate "I will stop"
+        # if the command is move forward/backward generate "I will move forward/backward"
+        # if the command is normal generate "I will move to destination"
         else:
             self.resp = "\n"+aff[random.randrange(len(aff))]
-            self.resp += ". I will " + command['command'] + " to " + command['destination'] + "."
+            if command['command'] == 'stop':
+               self.resp += "I will " + command['command']
+            elif command['destination'] == 'forward' or command['destination'] == 'backward':
+                self.resp += "I will" + command['command'] + command['destination']
+            else:
+                self.resp += "I will " + command['command'] + "to " + command['destination']
             rospy.loginfo(self.resp)
             return True
 
