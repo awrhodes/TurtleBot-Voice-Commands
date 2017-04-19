@@ -37,10 +37,6 @@ class Parser:
         rospy.loginfo(msg.data)
         transcript = msg.data.split()
 
-        # clear commmand dict.
-        self.full_command['destination'] = None 
-        
-
         # check if names in command
         if self.nameCheck(self.names, transcript):
             self.genCommandDict(self, transcript)
@@ -112,28 +108,34 @@ class Parser:
     # if more than one destination is given, the first one will be added to the command dict,
     # the rest will be added to the queue
     def genCommandDict(self, transcript):
+        # clear destination
+        self.full_command['destination'] = None 
         for cmd_key, cmd_value in self.move_commands.items():
             for word in transcript:
-                if self.dest_queue and word not in cmd_key['stop']:
+                if word in cmd_key['stop']:
+                    self.full_command['command'] = 'stop'
+                    self.full_command['destination'] = ''
+                    rospy.loginfo("Added stop to command.")
+                elif self.dest_queue:
                     rospy.loginfo("Destinations are currently queued. Command cannot be taken.")
-                elif word in cmd_value and self.full_command['command'] is None:
+                elif word in cmd_value and not self.dest_queue:
                     self.full_command['command'] = None
                     self.full_command['command'] = cmd_value
                     rospy.loginfo("Added " + cmd_value + " to command.")
-                # if there are no destinations queued add the word to the command dict
-                # if there are destinations queued add the word to the queue and 
-                # add the first dest in the queue to the command dict
-                else:
-                    for dest_key, dest_value in self.destination.items():
-                        if word in dest_value: 
-                            if not self.dest_queue:
-                                self.full_command['destination'] = dest_value
-                                rospy.loginfo("Added " + dest_value + " to destination.")
-                            elif self.dest_queue:
-                                self.full_command['destination'] = self.dest_queue[0]
-                            else:
-                                self.dest_queue.append(dest_value)
-                                rospy.loginfo("Added " + dest_value + "to destination queue.")
+            # if there are no destinations queued add the word to the command dict
+            # if there are destinations queued add the word to the queue and 
+            # add the first dest in the queue to the command dict 
+            for dest_key, dest_value in self.destination.items():
+                if word in dest_value: 
+                    if not self.dest_queue:
+                        self.full_command['destination'] = dest_value
+                        rospy.loginfo("Added " + dest_value + " to destination.")
+                    elif self.self.dest_queue:
+                        self.full_command['destination'] = self.dest_queue[0]
+                        self.dest_queue.pop(0)
+                        rospy.loginfo("Added " + self.dest_queue[0] + " to destination dict and removed from queue.")
+                        self.dest_queue.append(dest_value)
+                        rospy.loginfo("Added " + dest_value + " to dest queue")
 
     # generate response based on command dictionary
     # if no command is given return neg resp
