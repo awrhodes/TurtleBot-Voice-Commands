@@ -38,8 +38,8 @@ class Parser:
         transcript = msg.data.split()
 
         # clear commmand dict.
-        self.full_command['command'] = None
-        self.full_command['destination'] = None
+        self.full_command['destination'] = None 
+        
 
         # check if names in command
         if self.nameCheck(self.names, transcript):
@@ -117,14 +117,20 @@ class Parser:
                 if self.dest_queue and word not in cmd_key['stop']:
                     rospy.loginfo("Destinations are currently queued. Command cannot be taken.")
                 elif word in cmd_value and self.full_command['command'] is None:
+                    self.full_command['command'] = None
                     self.full_command['command'] = cmd_value
                     rospy.loginfo("Added " + cmd_value + " to command.")
+                # if there are no destinations queued add the word to the command dict
+                # if there are destinations queued add the word to the queue and 
+                # add the first dest in the queue to the command dict
                 else:
                     for dest_key, dest_value in self.destination.items():
-                        if word in dest_value:
+                        if word in dest_value: 
                             if not self.dest_queue:
                                 self.full_command['destination'] = dest_value
                                 rospy.loginfo("Added " + dest_value + " to destination.")
+                            elif self.dest_queue:
+                                self.full_command['destination'] = self.dest_queue[0]
                             else:
                                 self.dest_queue.append(dest_value)
                                 rospy.loginfo("Added " + dest_value + "to destination queue.")
