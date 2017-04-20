@@ -78,7 +78,6 @@ class Parser:
         with open(text, 'r') as list_text:
             for word in list_text:
                 strp_word = word.strip('\n')
-#                print(strp_word)
                 word_list.append(strp_word)
             rospy.loginfo("Generated list: \n" + str(word_list))
             return word_list
