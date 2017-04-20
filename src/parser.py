@@ -14,8 +14,8 @@ class Parser:
         rospy.loginfo("Parser running ...")
 
         # init key words
-        self.destination = self.genDict('destination.txt')
-        self.move_commands = self.genDict('commands.txt')
+        self.destination = self.genDict('destinations_csv.txt')
+        self.move_commands = self.genDict('commands_csv.txt')
         self.aff_resp = self.genList('aff_resp.txt')
         self.neg_resp = self.genList('neg_resp.txt')
         self.names = ["dixon", "dix"]
@@ -41,18 +41,7 @@ class Parser:
 
         # check if names in command
         if self.nameCheck(self.names, transcript):
-            self.genCommandDict(self, transcript)
-            # if command and destination word is in utterance add it to the command dict.
-            # for word in transcript:
-            #    if word in self.:
-            #        if self.full_command['command'] is None:
-            #            self.full_command['command'] = word
-            #            rospy.loginfo("Added " + word + " to command.")
-            #    else:
-            #        if word in self.destination:
-            #            self.full_command['destination'] = word
-            #            rospy.loginfo("Added " + word + " to destination.")
-
+            self.genCommandDict(transcript)
             # generate response
             if self.responseGen(self.full_command, self.aff_resp, self.neg_resp):
                 # add command dictionary values to message and publish
@@ -104,36 +93,32 @@ class Parser:
 
     # check each value for every key in the command and destination dictionaries
     # if any of the values matches a word in the transcription add it the full_command dict
-    # if the destination queue is filled, new commands can't be added except the stop command
-    # if more than one destination is given, the first one will be added to the command dict,
+    # if more than one destination is given the first one will be added to the command dict,
     # the rest will be added to the queue
     def genCommandDict(self, transcript):
-        # clear destination
+        # clear full command dict and queue
+        self.full_command['command'] = None
         self.full_command['destination'] = None
-        for cmd_key, cmd_value in self.move_commands.items():
-            for word in transcript:
+        self.dest_queue.clear()
+        for word in transcript:
+            for cmd_key, cmd_value in self.move_commands.items():
                 if word in cmd_key['stop']:
                     self.full_command['command'] = 'stop'
                     self.full_command['destination'] = ''
                     rospy.loginfo("Added stop to command.")
-                elif self.dest_queue:
-                    rospy.loginfo("Destinations are currently queued. Command cannot be taken.")
-                elif word in cmd_value and not self.dest_queue:
-                    self.full_command['command'] = None
+                elif word in cmd_value:
                     self.full_command['command'] = cmd_value
                     rospy.loginfo("Added " + cmd_value + " to command.")
+                else:
+                    rospy.loginfo("Command not detected.")
             # if there are no destinations queued add the word to the command dict
-            # if there are destinations queued add the word to the queue and
-            # add the first dest in the queue to the command dict
+            # if there are destinations queued add the word to the queue
             for dest_key, dest_value in self.destination.items():
                 if word in dest_value:
                     if not self.dest_queue:
                         self.full_command['destination'] = dest_value
                         rospy.loginfo("Added " + dest_value + " to destination.")
-                    elif self.self.dest_queue:
-                        self.full_command['destination'] = self.dest_queue[0]
-                        self.dest_queue.pop(0)
-                        rospy.loginfo("Added " + self.dest_queue[0] + " to destination dict and removed from queue.")
+                    elif self.dest_queue:
                         self.dest_queue.append(dest_value)
                         rospy.loginfo("Added " + dest_value + " to dest queue")
 
@@ -146,11 +131,7 @@ class Parser:
             self.resp = neg[random.randrange(len(neg))]
             rospy.loginfo(self.resp)
             return False
-        elif command['command'] == 'stop' or command['command'] == 'halt':
-            self.resp = "\n" + aff[random.randrange(len(aff))]
-            rospy.loginfo(self.resp)
-            return True
-        elif command['destination'] is None:
+        elif command['destination'] is None and command['command'] is not 'stop':
             self.resp = neg[random.randrange(len(neg))]
             rospy.loginfo(self.resp)
             return False
@@ -158,7 +139,7 @@ class Parser:
         # if the command is move forward/backward generate "I will move forward/backward"
         # if the command is normal generate "I will move to destination"
         else:
-            self.resp = "\n" + aff[random.randrange(len(aff))]
+            self.resp = aff[random.randrange(len(aff))] + "\n"
             if command['command'] == 'stop':
                 self.resp += "I will " + command['command']
             elif command['destination'] == 'forward' or command['destination'] == 'backward':
