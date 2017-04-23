@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import threading
 import rospy
 from geometry_msgs.msg import Twist
 from Dixon.msg import command
@@ -11,9 +12,11 @@ class Nav:
         rospy.loginfo("Nav module running ...")
 
         # init var (for move commands only)
-        self.lin_speed = 0.5
+        self.lin_speed = 2
         self.lin_dir = 0
-
+        
+        threadObj = threading.Thread(target=self.publishLocal)
+        threadObj.start()
         # subscriber
         rospy.Subscriber('Dixon/command', command, self.moveCallback)
 
@@ -30,17 +33,26 @@ class Nav:
         elif msg.command == "stop":
             self.lin_dir = 0
 
-        # publishing to turtlebot for testing
-        vel_pub = rospy.Publisher('/turtlesim1/turtle1/cmd_vel', Twist, queue_size=10)
-        vel_msg = Twist()
+        print(msg.command)
+        print(msg.destination)
+        print(self.lin_dir)
 
-        vel_msg.linear.x = self.lin_speed * self.lin_dir
-        vel_msg.linear.y = 0
-        vel_msg.linear.z = 0
-        vel_msg.angular.x = 0
-        vel_msg.angular.y = 0
-        vel_msg.angular.z = 0
-        vel_pub.publish(vel_msg)
+        #vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+       
+    def publishLocal(self):
+        vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+        rate = rospy.Rate(2)    # 2 Hz
+        while not rospy.is_shutdown():
+            vel_msg = Twist()
+
+            vel_msg.linear.x = self.lin_speed * self.lin_dir
+            vel_msg.linear.y = 0
+            vel_msg.linear.z = 0
+            vel_msg.angular.x = 0
+            vel_msg.angular.y = 0
+            vel_msg.angular.z = 0
+            vel_pub.publish(vel_msg)
+            rate.sleep()
 
     def cleanup(self):
         rospy.loginfo("Shutting down nav module ...")
