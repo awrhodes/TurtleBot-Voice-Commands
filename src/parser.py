@@ -99,30 +99,30 @@ class Parser:
         # clear full command dict and queue
         self.full_command['command'] = None
         self.full_command['destination'] = None
-        #self.dest_queue.clear()
+        # self.dest_queue.clear()
         for word in transcript:
             for cmd_key, cmd_value in self.move_commands.items():
                 for alt in cmd_value:
-                    #print(alt)
+                    # print(alt)
                     if word is alt:
                         print(str(cmd_key))
-                    #if word is cmd_key['stop'][cmd_value[alt]]:
-                        #self.full_command['command'] = 'stop'
-                        #self.full_command['destination'] = ''
-                        #rospy.loginfo("Added stop to command.")
-                        #pass
-                    #elif word in cmd_value[alt]:
-                        #self.full_command['command'] = cmd_value
-                        #rospy.loginfo("Added " + cmd_value + " to command.")
-                    #else:
-                        #rospy.loginfo("Command not detected.")
+                    # if word is cmd_key['stop'][cmd_value[alt]]:
+                        # self.full_command['command'] = 'stop'
+                        # self.full_command['destination'] = ''
+                        # rospy.loginfo("Added stop to command.")
+                        # pass
+                    # elif word in cmd_value[alt]:
+                        # self.full_command['command'] = cmd_value
+                        # rospy.loginfo("Added " + cmd_value + " to command.")
+                    # else:
+                        # rospy.loginfo("Command not detected.")
             # if there are no destinations queued add the word to the command dict
             # if there are destinations queued add the word to the queue
             for dest_key, dest_value in self.destination.items():
                 if word in dest_value:
                     if not self.dest_queue:
                         self.full_command['destination'] = dest_value
-                        #rospy.loginfo("Added " + dest_value + " to destination.")
+                        # rospy.loginfo("Added " + dest_value + " to destination.")
                     elif self.dest_queue:
                         self.dest_queue.append(dest_value)
                         rospy.loginfo("Added " + dest_value + " to dest queue")
