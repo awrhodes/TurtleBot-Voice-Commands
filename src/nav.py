@@ -28,7 +28,7 @@ class Nav:
         if msg.command == "go":
             if msg.destination == "forward":
                 self.lin_dir = 1
-            elif msg.destination == "backwards":
+            elif msg.destination == "backward":
                 self.lin_dir = -1
         elif msg.command == "stop":
             self.lin_dir = 0
@@ -40,7 +40,7 @@ class Nav:
         #vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
        
     def publishLocal(self):
-        vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+        vel_pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
         rate = rospy.Rate(2)    # 2 Hz
         while not rospy.is_shutdown():
             vel_msg = Twist()
