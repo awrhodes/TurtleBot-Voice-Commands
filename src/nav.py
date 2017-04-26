@@ -34,13 +34,12 @@ class Nav:
             self.lin_dir = 0
 
         print(msg.command)
-        print(msg.destination)
-        print(self.lin_dir)
+        rint(self.lin_dir)
 
         #vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
        
     def publishLocal(self):
-        vel_pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
+        vel_pub = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
         rate = rospy.Rate(2)    # 2 Hz
         while not rospy.is_shutdown():
             vel_msg = Twist()
