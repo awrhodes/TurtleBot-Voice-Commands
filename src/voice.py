@@ -1,6 +1,6 @@
-#!/user/bin/env python
+#!/usr/bin/env python
 
-import roslib
+#import roslib
 import rospy
 from std_msgs.msg import String
 
