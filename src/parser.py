@@ -14,8 +14,11 @@ class Parser:
         rospy.loginfo("Parser running ...")
 
         # init key words
-        self.destination = self.genDict('destinations_csv.txt')
-        self.move_commands = self.genDict('commands_csv.txt')
+        self.move_commands = ['go', 'move', 'head', 'speed', 'slow', 'turn']
+        self.stop_commands = ['stop', 'abort', 'kill', 'cancel']
+        self.destinations = ['forward', 'backward', 'left', 'right', 'up', 'down']
+        #self.destination = self.genDict('destinations_csv.txt')
+        #self.move_commands = self.genDict('commands_csv.txt')
         self.aff_resp = self.genList('aff_resp.txt')
         self.neg_resp = self.genList('neg_resp.txt')
         self.names = ["dixon", "dix"]
@@ -99,35 +102,23 @@ class Parser:
         # clear full command dict and queue
         self.full_command['command'] = None
         self.full_command['destination'] = None
-        # self.dest_queue.clear()
+        #self.dest_queue.clear()
         for word in transcript:
-            for cmd_key, cmd_value in self.move_commands.items():
-                for alt in cmd_value:
-                    # print(alt)
-                    if word is alt:
-                        print(str(cmd_key))
-                    # if word is cmd_key['stop'][cmd_value[alt]]:
-                        # self.full_command['command'] = 'stop'
-                        # self.full_command['destination'] = ''
-                        # rospy.loginfo("Added stop to command.")
-                        # pass
-                    # elif word in cmd_value[alt]:
-                        # self.full_command['command'] = cmd_value
-                        # rospy.loginfo("Added " + cmd_value + " to command.")
-                    # else:
-                        # rospy.loginfo("Command not detected.")
-            # if there are no destinations queued add the word to the command dict
-            # if there are destinations queued add the word to the queue
-            for dest_key, dest_value in self.destination.items():
-                if word in dest_value:
-                    if not self.dest_queue:
-                        self.full_command['destination'] = dest_value
-                        # rospy.loginfo("Added " + dest_value + " to destination.")
-                    elif self.dest_queue:
-                        self.dest_queue.append(dest_value)
-                        rospy.loginfo("Added " + dest_value + " to dest queue")
+            if word in self.stop_commands:
+                self.full_command['command'] = self.stop_commands[0]
+                rospy.loginfo("Added  " + self.stop_commands[0] + " to command dict")
+                pass
+            elif word in self.move_commands:
+                self.full_command['command'] = self.move_commands[0]
+                rospy.loginfo("Added " + self.move_commands[0] + " to command dict")
+        if self.full_command['command'] is not None:
+            for word in transcript:
+                if word in self.destinations:
+                    self.full_command['destination'] = word
+                    rospy.loginfo("Added " + word + " to command dict")
+                    pass
 
-    # generate response based on command dictionary
+   # generate response based on command dictionary
     # if no command is given return neg resp
     # if command other than stop is given but no destination is return neg resp
     # otherwise return pos resp
