@@ -16,13 +16,13 @@ class Parser:
         # init key words
         self.move_commands = ['go', 'move', 'head', 'speed', 'slow', 'turn']
         self.stop_commands = ['stop', 'abort', 'kill', 'cancel']
-        self.destinations = ['forward', 'backward', 'left', 'right', 'up', 'down']
-        #self.destination = self.genDict('destinations_csv.txt')
-        #self.move_commands = self.genDict('commands_csv.txt')
+        self.local_dests = ['forward', 'backward', 'left', 'right', 'up', 'down']
+        self.global_dests = {}
         self.aff_resp = self.genList('aff_resp.txt')
         self.neg_resp = self.genList('neg_resp.txt')
         self.names = ["dixon", "dix"]
         self.dest_queue = []
+        self.local_flag = False
 
         # dict that contains the full command to be published
         self.full_command = {'command': None, 'destination': None}
@@ -102,7 +102,8 @@ class Parser:
         # clear full command dict and queue
         self.full_command['command'] = None
         self.full_command['destination'] = None
-        #self.dest_queue.clear()
+        self.local_flag = False
+        # self.dest_queue.clear()
         for word in transcript:
             if word in self.stop_commands:
                 self.full_command['command'] = self.stop_commands[0]
@@ -113,12 +114,15 @@ class Parser:
                 rospy.loginfo("Added " + self.move_commands[0] + " to command dict")
         if self.full_command['command'] is not None:
             for word in transcript:
-                if word in self.destinations:
+                if word in self.local_dests:
                     self.full_command['destination'] = word
+                    self.local_flag = True
                     rospy.loginfo("Added " + word + " to command dict")
                     pass
+                else:
+                    rospy.loginfo("No destinations detected.")
 
-   # generate response based on command dictionary
+    # generate response based on command dictionary
     # if no command is given return neg resp
     # if command other than stop is given but no destination is return neg resp
     # otherwise return pos resp
