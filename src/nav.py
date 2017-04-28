@@ -12,7 +12,7 @@ class Nav:
         rospy.loginfo("Nav module running ...")
 
         # init var (for move commands only)
-        self.lin_speed = 2
+        self.lin_speed = 0.5 
         self.lin_dir = 0
         
         threadObj = threading.Thread(target=self.publishLocal)
@@ -39,7 +39,7 @@ class Nav:
         #vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
        
     def publishLocal(self):
-        vel_pub = rospy.Publisher('cmd_vel_mux/input/navi', Twist, queue_size=10)
+        vel_pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
         rate = rospy.Rate(2)    # 2 Hz
         while not rospy.is_shutdown():
             vel_msg = Twist()
