@@ -4,7 +4,7 @@ import rospy
 import random
 from std_msgs.msg import String
 from Dixon.msg import command
-import csv
+# import csv
 
 
 class Parser:
@@ -16,16 +16,16 @@ class Parser:
         # init key words
         self.move_commands = ['go', 'move', 'head', 'speed', 'slow', 'turn']
         self.stop_commands = ['stop', 'abort', 'kill', 'cancel']
-        self.destinations = ['forward', 'backward', 'left', 'right', 'up', 'down']
-        #self.destination = self.genDict('destinations_csv.txt')
-        #self.move_commands = self.genDict('commands_csv.txt')
+        self.local_dests = ['forward', 'backward', 'left', 'right', 'up', 'down']
+        self.global_dests_dict = {'alpha': (0, 1), 'beta': (2, 3), 'delta': (4, 5), 'gamma': (6, 7)}
+        self.global_dests = ['alpha', 'beta', 'delta', 'gamma']
         self.aff_resp = self.genList('aff_resp.txt')
         self.neg_resp = self.genList('neg_resp.txt')
         self.names = ["dixon", "dix"]
         self.dest_queue = []
 
         # dict that contains the full command to be published
-        self.full_command = {'command': None, 'destination': None}
+        self.full_command = {'command': None, 'destination': None, 'local': False, 'x': 0, 'y': 0}
 
         # construct publisher objects
         self.command_msg = command()
@@ -64,15 +64,15 @@ class Parser:
     # takes in a csv file
     # the first value in a row is the command, all other values are alternative words
     # (the first command counts as an alternative word. if the same word is included twice an error is thrown)
-    def genDict(self, text):
-        with open(text, 'r') as csv_file:
-            reader = csv.reader(csv_file)
-            try:
-                dic = dict((key[0], key) for key in reader)
-                rospy.loginfo("Generated:\n" + str(dic))
-                return dic
-            except IndexError:
-                rospy.loginfo("IndexError in genList(): Is the same word listed twice?")
+    # def genDict(self, text):
+        # with open(text, 'r') as csv_file:
+            # reader = csv.reader(csv_file)
+            # try:
+                # dic = dict((key[0], tuple(reader[1], reader[2])) for key in reader)
+                # rospy.loginfo("Generated:\n" + str(dic))
+                # return dic
+            # except IndexError:
+                # rospy.loginfo("IndexError in genDict(): Is the same word listed twice?")
 
     # generate list based on text file
     # splits at newline
@@ -102,7 +102,9 @@ class Parser:
         # clear full command dict and queue
         self.full_command['command'] = None
         self.full_command['destination'] = None
-        #self.dest_queue.clear()
+        self.full_command['local'] = True
+
+        # self.dest_queue.clear()
         for word in transcript:
             if word in self.stop_commands:
                 self.full_command['command'] = self.stop_commands[0]
@@ -113,12 +115,19 @@ class Parser:
                 rospy.loginfo("Added " + self.move_commands[0] + " to command dict")
         if self.full_command['command'] is not None:
             for word in transcript:
-                if word in self.destinations:
+                if word in self.local_dests:
                     self.full_command['destination'] = word
+                    self.full_command['local'] = True
                     rospy.loginfo("Added " + word + " to command dict")
                     pass
+                elif word in self.global_dests:
+                    self.full_command['destination'] = word
+                    self.full_command['x'] = self.global_dests_dict[word][0]
+                    self.full_command['y'] = self.global_dests_dict[word][1]
+                else:
+                    rospy.loginfo("No destinations detected.")
 
-   # generate response based on command dictionary
+    # generate response based on command dictionary
     # if no command is given return neg resp
     # if command other than stop is given but no destination is return neg resp
     # otherwise return pos resp
