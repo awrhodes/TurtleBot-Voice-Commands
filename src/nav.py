@@ -66,20 +66,19 @@ class Nav:
         self.current_y = msg.pose.pose.position.y
        
     def publishLocal(self):
-        if action_flag == 1:
-            vel_pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
-            rate = rospy.Rate(100)    # 100 Hz
-            while not rospy.is_shutdown():
-                vel_msg = Twist()
+        vel_pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
+        rate = rospy.Rate(100)    # 100 Hz
+        while not rospy.is_shutdown() and self.action_flag == 1:
+            vel_msg = Twist()
 
-                vel_msg.linear.x = self.lin_speed * self.lin_dir
-                vel_msg.linear.y = 0
-                vel_msg.linear.z = 0
-                vel_msg.angular.x = 0
-                vel_msg.angular.y = 0
-                vel_msg.angular.z = 0
-                vel_pub.publish(vel_msg)
-                rate.sleep()
+            vel_msg.linear.x = self.lin_speed * self.lin_dir
+            vel_msg.linear.y = 0
+            vel_msg.linear.z = 0
+            vel_msg.angular.x = 0
+            vel_msg.angular.y = 0
+            vel_msg.angular.z = 0
+            vel_pub.publish(vel_msg)
+            rate.sleep()
 
     def moveToGoal(self, x, y):
         ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
