@@ -5,10 +5,11 @@ import rospy
 import actionlib
 from geometry_msgs.msg import Twist
 from actionlib_msgs.msg import *
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import Point, PoseWithCovarianceStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from Dixon.msg import command
-from nav_msgs.msg import Odometry
+#from nav_msgs.msg import Odometry
+#from geometry_msgs.msg import Pose
 
 
 class Nav:
@@ -31,7 +32,7 @@ class Nav:
         threadObj.start()
         # subscriber
         rospy.Subscriber('Dixon/command', command, self.moveCallback)
-        rospy.Subscriber('odom', Odometry, self.odomCallback)
+        rospy.Subscriber('amcl_pose', PoseWithCovarianceStamped, self.odomCallback)
 
     def moveCallback(self, msg):
         # check the command
@@ -59,7 +60,7 @@ class Nav:
             if self.action_flag is 2:
                 # actionlib send stop goal
                 self.action_flag = 0
-                self.moveToGoal(self.current_x, self.current.y)
+                self.moveToGoal(self.current_x, self.current_y)
             elif self.action_flag is 1:
                 self.lin_dir = 0
                 self.action_flag = 0
