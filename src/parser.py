@@ -17,7 +17,7 @@ class Parser:
         self.move_commands = ['go', 'move', 'head', 'speed', 'slow', 'turn']
         self.stop_commands = ['stop', 'abort', 'kill', 'cancel']
         self.local_dests = ['forward', 'backward', 'left', 'right', 'up', 'down']
-        self.global_dests_dict = {'alpha': (0, 1), 'beta': (2, 3), 'delta': (4, 5), 'gamma': (6, 7)}
+        self.global_dests_dict = {'alpha': (-4.9219, 3.6223), 'beta': (-5.9903, -0.2958), 'delta': (2.6523, 2.1009), 'gamma': (1.6086, -1.0783)}
         self.global_dests = ['alpha', 'beta', 'delta', 'gamma']
         self.aff_resp = self.genList('aff_resp.txt')
         self.neg_resp = self.genList('neg_resp.txt')
@@ -25,7 +25,7 @@ class Parser:
         self.dest_queue = []
 
         # dict that contains the full command to be published
-        self.full_command = {'command': None, 'destination': None, 'local': None, 'x': 0, 'y': 0}
+        self.full_command = {'command': None, 'destination': None, 'local': False, 'x': 0, 'y': 0}
 
         # construct publisher objects
         self.command_msg = command()
@@ -106,7 +106,7 @@ class Parser:
         # clear full command dict and queue
         self.full_command['command'] = None
         self.full_command['destination'] = None
-        self.full_command['local'] = None
+        self.full_command['local'] = False
 
         # self.dest_queue.clear()
         for word in transcript:
