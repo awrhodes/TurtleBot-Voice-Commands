@@ -39,14 +39,19 @@ class Nav:
         # will be changed when nav goals are added
         # will use different functions for different commands
         if msg.local is True:
-            if msg.command is "go":
+            if msg.command == "go":
                 self.action_flag = 1
+		print(msg.destination)
                 if msg.destination == "forward":
                     self.lin_dir = 1
                 elif msg.destination == "backward":
                     self.lin_dir = -1
         else:
+	    print("msg.local not true")
             if msg.command == "go":
+		print(msg.command)
+		print(msg.x)
+		print(msg.y)
                 # actionlib send goal
                 self.action_flag = 2
                 self.moveToGoal(msg.x, msg.y)
@@ -71,7 +76,8 @@ class Nav:
     def publishLocal(self):
         vel_pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
         rate = rospy.Rate(100)    # 100 Hz
-        while not rospy.is_shutdown() and self.action_flag == 1:
+	rospy.loginfo("created local thread")
+        while not rospy.is_shutdown():
             vel_msg = Twist()
 
             vel_msg.linear.x = self.lin_speed * self.lin_dir
@@ -80,29 +86,32 @@ class Nav:
             vel_msg.angular.x = 0
             vel_msg.angular.y = 0
             vel_msg.angular.z = 0
-            vel_pub.publish(vel_msg)
+	    if self.action_flag == 1:
+	    	rospy.loginfo("publishing local velocity")
+            	vel_pub.publish(vel_msg)
             rate.sleep()
 
     def moveToGoal(self, x, y):
+	print("in moveToGoal")
         ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+	
+	while not ac.wait_for_server(rospy.Duration.from_sec(5.0)):
+    		rospy.loginfo("Waiting for move_base action server to respond ...")
+    	goal = MoveBaseGoal()
 
-        while(not ac.wait_for_server(rospy.Duration.from_sec(5.0))):
-            rospy.loginfo("Waiting for move_base action server to respond ...")
-            goal = MoveBaseGoal()
+    	# header
+    	goal.target_pose.header.frame_id = "map"
+    	goal.target_pose.header.stamp = rospy.Time.now()
 
-            # header
-            goal.target_pose.header.frame_id = "map"
-            goal.target_pose.header.stamp = rospy.Time.now()
+    	# point and orientation
+    	goal.target_pose.pose.position = Point(x, y, 0)
+    	goal.target_pose.pose.orientation.x = 0.0
+    	goal.target_pose.pose.orientation.y = 0.0
+    	goal.target_pose.pose.orientation.z = 0.0
+    	goal.target_pose.pose.orientation.w = 1.0
 
-            # point and orientation
-            goal.target_pose.pose.position = Point(x, y, 0)
-            goal.target_pose.pose.orientation.x = 0.0
-            goal.target_pose.pose.orientation.y = 0.0
-            goal.target_pose.pose.orientation.z = 0.0
-            goal.target_pose.pose.orientation.w = 1.0
-
-            rospy.loginfo("Sending Goal ...")
-            ac.send_goal(goal)
+    	rospy.loginfo("Sending Goal ...")
+   	ac.send_goal(goal)
 
     def cleanup(self):
         rospy.loginfo("Shutting down nav module ...")
