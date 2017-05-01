@@ -45,18 +45,19 @@ class Nav:
                     self.lin_dir = 1
                 elif msg.destination == "backward":
                     self.lin_dir = -1
-            elif msg.command == "stop":
-                self.action_flag = 0
-                self.lin_dir = 0
         else:
             if msg.command == "go":
                 # actionlib send goal
                 self.action_flag = 2
                 self.moveToGoal(msg.x, msg.y)
-            elif msg.command == "stop":
+        if msg.command == "stop":
+            if self.action_flag is 2:
                 # actionlib send stop goal
                 self.action_flag = 0
                 self.moveToGoal(self.current_x, self.current.y)
+            elif self.action_flag is 1:
+                self.lin_dir = 0
+                self.action_flag = 0
 
         print(msg.command)
         print(self.lin_dir)
@@ -86,7 +87,7 @@ class Nav:
         ac = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 
         while(not ac.wait_for_server(rospy.Duration.from_sec(5.0))):
-            rospt.loginfo("Waiting for move_base action server to respond ...")
+            rospy.loginfo("Waiting for move_base action server to respond ...")
             goal = MoveBaseGoal()
 
             # header

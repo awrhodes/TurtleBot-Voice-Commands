@@ -25,7 +25,7 @@ class Parser:
         self.dest_queue = []
 
         # dict that contains the full command to be published
-        self.full_command = {'command': None, 'destination': None, 'local': False, 'x': 0, 'y': 0}
+        self.full_command = {'command': None, 'destination': None, 'local': None, 'x': 0, 'y': 0}
 
         # construct publisher objects
         self.command_msg = command()
@@ -49,10 +49,14 @@ class Parser:
             if self.responseGen(self.full_command, self.aff_resp, self.neg_resp):
                 # add command dictionary values to message and publish
                 self.command_msg.command = str(self.full_command['command'])
+                self.command_msg.local = self.full_command['local']
                 if self.full_command['command'] == 'stop':
                     self.command_msg.destination = ""
                 else:
                     self.command_msg.destination = str(self.full_command['destination'])
+                if self.full_command['local'] is False:
+                    self.command_msg.x = self.full_command['x']
+                    self.command_msg.y = self.full_command['y']
                 rospy.loginfo(self.full_command)
                 rospy.loginfo(str(self.command_msg))
                 self.pub_cmd.publish(self.command_msg)
@@ -102,7 +106,7 @@ class Parser:
         # clear full command dict and queue
         self.full_command['command'] = None
         self.full_command['destination'] = None
-        self.full_command['local'] = True
+        self.full_command['local'] = None
 
         # self.dest_queue.clear()
         for word in transcript:
@@ -122,8 +126,10 @@ class Parser:
                     pass
                 elif word in self.global_dests:
                     self.full_command['destination'] = word
+                    self.full_command['local'] = False
                     self.full_command['x'] = self.global_dests_dict[word][0]
                     self.full_command['y'] = self.global_dests_dict[word][1]
+                    pass
                 else:
                     rospy.loginfo("No destinations detected.")
 
