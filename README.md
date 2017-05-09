@@ -10,8 +10,8 @@ Video demonstrating project: https://www.youtube.com/watch?v=Tt63bGHPu7k
 
 Report discussing project available here: https://drive.google.com/open?id=0B43Xw82gA0X7dGZjOW9DVjFIVWc
 
-###Master Branch:
+### Master Branch:
 Finished code will be pushed here.
 
-###Testing Branch:
+### Testing Branch:
 Used for testing. 
