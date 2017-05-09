@@ -1,0 +1,161 @@
+Language model created by QuickLM on Sun Apr 16 20:20:14 EDT 2017
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 34 sentences and 36 words
+
+\data\
+ngram 1=36
+ngram 2=68
+ngram 3=34
+
+\1-grams:
+-0.7782 </s> -0.3010
+-0.7782 <s> -0.2218
+-2.3096 ALPHA -0.2218
+-2.3096 BACKWARD -0.2218
+-2.3096 BETA -0.2218
+-2.3096 DELTA -0.2218
+-2.3096 DIX -0.2218
+-2.3096 DIXON -0.2218
+-2.3096 DOOR -0.2218
+-2.3096 DOWN -0.2218
+-2.3096 FENN -0.2218
+-2.3096 FH -0.2218
+-2.3096 FORWARD -0.2218
+-2.3096 GAMMA -0.2218
+-2.3096 GO -0.2218
+-2.3096 HALL -0.2218
+-2.3096 HALT -0.2218
+-2.3096 HEAD -0.2218
+-2.3096 HEY -0.2218
+-2.3096 LEFT -0.2218
+-2.3096 MOVE -0.2218
+-2.3096 OFFICE -0.2218
+-2.3096 PLEASE -0.2218
+-2.3096 POINT -0.2218
+-2.3096 RIGHT -0.2218
+-2.3096 ROOM -0.2218
+-2.3096 ROTATE -0.2218
+-2.3096 SLOW -0.2218
+-2.3096 SPEED -0.2218
+-2.3096 STOP -0.2218
+-2.3096 TO -0.2218
+-2.3096 TO(2) -0.2218
+-2.3096 TO(3) -0.2218
+-2.3096 TURN -0.2218
+-2.3096 UP -0.2218
+-2.3096 YO -0.2218
+
+\2-grams:
+-1.8325 <s> ALPHA 0.0000
+-1.8325 <s> BACKWARD 0.0000
+-1.8325 <s> BETA 0.0000
+-1.8325 <s> DELTA 0.0000
+-1.8325 <s> DIX 0.0000
+-1.8325 <s> DIXON 0.0000
+-1.8325 <s> DOOR 0.0000
+-1.8325 <s> DOWN 0.0000
+-1.8325 <s> FENN 0.0000
+-1.8325 <s> FH 0.0000
+-1.8325 <s> FORWARD 0.0000
+-1.8325 <s> GAMMA 0.0000
+-1.8325 <s> GO 0.0000
+-1.8325 <s> HALL 0.0000
+-1.8325 <s> HALT 0.0000
+-1.8325 <s> HEAD 0.0000
+-1.8325 <s> HEY 0.0000
+-1.8325 <s> LEFT 0.0000
+-1.8325 <s> MOVE 0.0000
+-1.8325 <s> OFFICE 0.0000
+-1.8325 <s> PLEASE 0.0000
+-1.8325 <s> POINT 0.0000
+-1.8325 <s> RIGHT 0.0000
+-1.8325 <s> ROOM 0.0000
+-1.8325 <s> ROTATE 0.0000
+-1.8325 <s> SLOW 0.0000
+-1.8325 <s> SPEED 0.0000
+-1.8325 <s> STOP 0.0000
+-1.8325 <s> TO 0.0000
+-1.8325 <s> TO(2) 0.0000
+-1.8325 <s> TO(3) 0.0000
+-1.8325 <s> TURN 0.0000
+-1.8325 <s> UP 0.0000
+-1.8325 <s> YO 0.0000
+-0.3010 ALPHA </s> -0.3010
+-0.3010 BACKWARD </s> -0.3010
+-0.3010 BETA </s> -0.3010
+-0.3010 DELTA </s> -0.3010
+-0.3010 DIX </s> -0.3010
+-0.3010 DIXON </s> -0.3010
+-0.3010 DOOR </s> -0.3010
+-0.3010 DOWN </s> -0.3010
+-0.3010 FENN </s> -0.3010
+-0.3010 FH </s> -0.3010
+-0.3010 FORWARD </s> -0.3010
+-0.3010 GAMMA </s> -0.3010
+-0.3010 GO </s> -0.3010
+-0.3010 HALL </s> -0.3010
+-0.3010 HALT </s> -0.3010
+-0.3010 HEAD </s> -0.3010
+-0.3010 HEY </s> -0.3010
+-0.3010 LEFT </s> -0.3010
+-0.3010 MOVE </s> -0.3010
+-0.3010 OFFICE </s> -0.3010
+-0.3010 PLEASE </s> -0.3010
+-0.3010 POINT </s> -0.3010
+-0.3010 RIGHT </s> -0.3010
+-0.3010 ROOM </s> -0.3010
+-0.3010 ROTATE </s> -0.3010
+-0.3010 SLOW </s> -0.3010
+-0.3010 SPEED </s> -0.3010
+-0.3010 STOP </s> -0.3010
+-0.3010 TO </s> -0.3010
+-0.3010 TO(2) </s> -0.3010
+-0.3010 TO(3) </s> -0.3010
+-0.3010 TURN </s> -0.3010
+-0.3010 UP </s> -0.3010
+-0.3010 YO </s> -0.3010
+
+\3-grams:
+-0.3010 <s> ALPHA </s>
+-0.3010 <s> BACKWARD </s>
+-0.3010 <s> BETA </s>
+-0.3010 <s> DELTA </s>
+-0.3010 <s> DIX </s>
+-0.3010 <s> DIXON </s>
+-0.3010 <s> DOOR </s>
+-0.3010 <s> DOWN </s>
+-0.3010 <s> FENN </s>
+-0.3010 <s> FH </s>
+-0.3010 <s> FORWARD </s>
+-0.3010 <s> GAMMA </s>
+-0.3010 <s> GO </s>
+-0.3010 <s> HALL </s>
+-0.3010 <s> HALT </s>
+-0.3010 <s> HEAD </s>
+-0.3010 <s> HEY </s>
+-0.3010 <s> LEFT </s>
+-0.3010 <s> MOVE </s>
+-0.3010 <s> OFFICE </s>
+-0.3010 <s> PLEASE </s>
+-0.3010 <s> POINT </s>
+-0.3010 <s> RIGHT </s>
+-0.3010 <s> ROOM </s>
+-0.3010 <s> ROTATE </s>
+-0.3010 <s> SLOW </s>
+-0.3010 <s> SPEED </s>
+-0.3010 <s> STOP </s>
+-0.3010 <s> TO </s>
+-0.3010 <s> TO(2) </s>
+-0.3010 <s> TO(3) </s>
+-0.3010 <s> TURN </s>
+-0.3010 <s> UP </s>
+-0.3010 <s> YO </s>
+
+\end\
